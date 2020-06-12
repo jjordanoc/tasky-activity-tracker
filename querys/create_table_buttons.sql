@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS buttons (
     button_name TEXT NOT NULL,
     timespan TEXT NOT NULL,
     multiplier TEXT NOT NULL,
+    color TEXT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
     

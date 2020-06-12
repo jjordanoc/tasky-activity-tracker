@@ -1,4 +1,4 @@
-from flask import render_template, redirect, Flask, session, request, url_for
+from flask import render_template, redirect, Flask, session, request, url_for, flash
 from functions import login_required, msg
 from sqlitetools import create_connection, execute_query, execute_fetch_query
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -7,40 +7,22 @@ from datetime import timedelta, datetime
 
 """ Setup app and database """
 app = Flask("__name__")
-app.secret_key = "Piojito1965."
+app.secret_key = "a76&ohljasdt7&jYUHas/(jasdu"
 
 database = create_connection("database.db")
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/")
 @login_required
 def index():
     # Template name
     template = "index.html"
 
-    if request.method == "POST":
-        
-        # Get data from the form
-        button_name = request.form.get("name")
-        timespan = request.form.get("timespan")
-        multiplier = request.form.get("multiplier")
+    # Get all the buttons that correspond to this user
+    buttons = execute_fetch_query(database, "SELECT * FROM buttons WHERE user_id=?", session["user_id"])
 
-        # Error check
-        if not button_name or not timespan or not multiplier:
-            return msg(template, "Invalid arguments", "warning")
+    # Render main page with all the user's buttons
+    return render_template(template, buttons=buttons)
 
-        # Insert data into buttons database
-        execute_query(database, "INSERT INTO buttons (user_id, button_name, timespan, multiplier) VALUES (?, ?, ?, ?);", 
-                      session["user_id"], button_name, timespan, multiplier)
-
-        # Get all the buttons that correspond to this user
-        buttons = execute_fetch_query(database, "SELECT * FROM buttons WHERE user_id=?", session["user_id"])
-        # Render main page with all the user's buttons
-        return render_template(template, buttons=buttons)
-    else:
-        # Get all the buttons that correspond to this user
-        buttons = execute_fetch_query(database, "SELECT * FROM buttons WHERE user_id=?", session["user_id"])
-        # Render main page with all the user's buttons
-        return render_template(template, buttons=buttons)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -104,8 +86,6 @@ def register():
         # Check if session is valid
         tmpid = execute_fetch_query(database, "SELECT id FROM users WHERE username=?;", username)
 
-        print(tmpid)
-
         # Store session
         session["user_id"] = tmpid[0][0]
 
@@ -123,6 +103,34 @@ def logout():
     
     # Redirect user to login
     return redirect("/login")
+
+
+@app.route("/update", methods=["POST"])
+@login_required
+def update():
+    """ Update the page """
+
+    if request.method == "POST":
+        
+        # Get data from the form
+        button_name = request.form.get("name")
+        timespan = request.form.get("timespan")
+        multiplier = request.form.get("multiplier")
+        button_color = request.form.get("color")
+
+        # Error check
+        if not button_name or not timespan or not multiplier:
+            flash("Invalid arguments", "danger")
+            return redirect("/")
+
+        # Insert data into buttons database
+        execute_query(database, "INSERT INTO buttons (user_id, button_name, timespan, multiplier, color) VALUES (?, ?, ?, ?, ?);", 
+                      session["user_id"], button_name, timespan, multiplier, button_color)
+
+        # Render main page with all the user's buttons
+        return redirect("/")
+
+    
 
 
 

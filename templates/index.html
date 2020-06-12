@@ -1,22 +1,18 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Main
+    HOME | BIG BUTTON
 {% endblock %}
 
 {% block main %}
     <!-- Button trigger modal -->
-    <div class="container m-autp p-5">
+    
         <!-- old button
         <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#exampleModalCenter">
         Add button
         </button>
         -->
-        <div class="image-container">
-            <input class="contained-image" type="image" src="static/images/red_button.png" data-toggle="modal" data-target="#exampleModalCenter">
-            <h1 class="contained-text">Add button</h1>
-        </div>
-    </div>
+
 
     <!-- Modal -->
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -30,14 +26,15 @@
                 </div>
                 <div class="modal-body">
                     <!-- Button adding form -->
-                    <form action="/" method="post">
+                    <form action="/update" method="post" name="add-button">
                         <div class="form-group">
                             <label for="name">Button name:</label>
-                            <input autocomplete="off" autofocus class="form-control" name="name" id="name" placeholder="My little button" type="text">
+                            <input autocomplete="off" autofocus class="form-control" name="name" id="name" maxlength="30" placeholder="My little button" type="text">
                         </div>
                         <div class="form-group">
                             <label for="timespan">Timespan:</label>
                             <select class="form-control" name="timespan" id="timespan">
+                                <option value="manualreset">Manual Reset</option>
                                 <option value="days">Days</option>
                                 <option value="weeks">Weeks</option>
                                 <option value="months">Months</option>
@@ -48,22 +45,38 @@
                             <label for="multiplier">Multiplier:</label>
                             <input type="number" min="1" name="multiplier" id="multiplier">
                         </div>
-                        <button class="btn btn-primary" type="submit">Add</button>
+                        <div class="form-group">
+                            <label for="color">Color:</label>
+                            <input type="color" name="color" id="color">
+                        </div>
+                        <button id="addButton" class="btn btn-primary" type="submit">Add</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    <div class="container">
+
+
+    <!-- User's buttons -->
+    <div class="buttons">
+        <button class="button" data-toggle="modal" data-target="#exampleModalCenter" style="background-color: red;">
+            <h3>ADD BUTTON</h3>
+        </button>
         {% if buttons %}
             {% for button in buttons %}
+                <!-- User's buttons 
                 <div class="container">
-                    <h1>{{button[0]}} {{button[1]}} {{button[2]}} {{button[3]}}</h1>
+                    <h1>{{button[0]}} {{button[1]}} {{button[2]}} {{button[3]}} {{button[4]}}</h1>
                 </div>
-                <div class="image-container">
-                    <input class="contained-image" type="image" src="static/images/red_button.png" data-toggle="modal" data-target="#exampleModalCenter">
-                    <h3 class="contained-text">{{button[1]}}</h3>
-                </div>
+                -->
+                <form action="/update" method="POST">
+                        <!-- User's buttons 
+                        <input class="contained-image" type="image" src="static/images/red_button.png">
+                        -->
+                        <button id="{{ button }}" class="button" type="submit" style="background-color: {{ button[4] }};">
+                            <h3>{{button[1]}}</h3>
+                        </button>
+                </form>
             {% endfor %}
         {% endif %}
     </div>

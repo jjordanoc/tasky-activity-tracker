@@ -1,3 +1,8 @@
+@mixin size($width, $height) {
+    width: $width;
+    height: $height;
+}
+
 /* basic overrides */
 body
 {
@@ -43,22 +48,52 @@ nav
     background-color: black;
 }
 
-.image-container
+
+/* big button */
+.big-image-container
 {
     position: relative;
     width: 100%;
 }
 
-.contained-image
+.big-contained-image
 {
+    position: relative;
     width: 300px;
     height: 300px;
-    filter: hue-rotate(200);
 }
 
-.contained-text
+.big-contained-text
 {
     position: absolute;
+    top: 40%;
+    left: 20%;
+    right: 20%;
+}
+
+/* user's buttons */
+.buttons {
+    display:         flex;
+    flex-wrap:       wrap;
+    justify-content: center;
+}
+
+.button {
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+    @include size(250px, 250px);
+    margin: 10px;
+    z-index: 2;
+    border-radius: 50%;
+    border: 10px solid #222222;
+}
+
+.button h3
+{
+    position: absolute;
+    color: white;
+    user-select: none;
     top: 40%;
     left: 20%;
     right: 20%;

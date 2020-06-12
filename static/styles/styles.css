@@ -1,0 +1,94 @@
+/* basic overrides */
+body {
+  /* override Bootstrap's settings */
+  background-color: black;
+  color: white;
+  font-family: 'Special Elite', cursive;
+}
+
+main .form-control {
+  /* center form controls */
+  display: inline-block;
+  /* override Bootstrap's 100% width for form controls */
+  width: auto;
+}
+
+main {
+  /* scroll horizontally as needed */
+  overflow-x: auto;
+  /* center contents */
+  text-align: center;
+}
+
+main img {
+  /* constrain images on small screens */
+  max-width: 100%;
+}
+
+/* especific overrides */
+nav {
+  border-bottom: 0.3em solid white;
+}
+
+.modal-content {
+  background-color: black;
+}
+
+/* big button */
+.big-image-container {
+  position: relative;
+  width: 100%;
+}
+
+.big-contained-image {
+  position: relative;
+  width: 300px;
+  height: 300px;
+}
+
+.big-contained-text {
+  position: absolute;
+  top: 40%;
+  left: 20%;
+  right: 20%;
+}
+
+/* user's buttons */
+.buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.button {
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  position: relative;
+  width: 250px;
+  height: 250px;
+  margin: 10px;
+  z-index: 2;
+  border-radius: 50%;
+  border: 10px solid #222222;
+}
+
+.button h3 {
+  position: absolute;
+  color: white;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  top: 40%;
+  left: 20%;
+  right: 20%;
+}
+/*# sourceMappingURL=styles.css.map */
