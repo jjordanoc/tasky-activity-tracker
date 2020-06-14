@@ -48,30 +48,16 @@ nav
     background-color: black;
 }
 
-
-/* big button */
-.big-image-container
-{
-    position: relative;
-    width: 100%;
+.alert {
+    border-radius: 0;
 }
 
-.big-contained-image
-{
-    position: relative;
-    width: 300px;
-    height: 300px;
+.counter {
+    display: inline-block;
 }
 
-.big-contained-text
-{
-    position: absolute;
-    top: 40%;
-    left: 20%;
-    right: 20%;
-}
 
-/* user's buttons */
+/* buttons */
 .buttons {
     display:         flex;
     flex-wrap:       wrap;
@@ -85,8 +71,19 @@ nav
     @include size(250px, 250px);
     margin: 10px;
     z-index: 2;
-    border-radius: 50%;
     border: 10px solid #222222;
+    border-radius: 50%;
+    outline: none !important;
+    box-shadow: 0 8px #777;
+}
+
+.button:hover {
+    filter: brightness(90%);
+}
+
+.button:active {
+    box-shadow: 0 3px #555;
+    transform: translateY(5px);
 }
 
 .button h3
@@ -97,4 +94,16 @@ nav
     top: 40%;
     left: 20%;
     right: 20%;
+}
+
+.button-foot {
+    position: relative;
+}
+
+.remove-button {
+    position: relative;
+    border: none;
+    @include size(5%, 5%);
+    background-color: red;
+    color: white;
 }

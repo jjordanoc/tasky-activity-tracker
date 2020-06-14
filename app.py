@@ -1,8 +1,9 @@
-from flask import render_template, redirect, Flask, session, request, url_for, flash
+from flask import render_template, redirect, Flask, session, request, url_for, flash, jsonify
 from functions import login_required, msg
 from sqlitetools import create_connection, execute_query, execute_fetch_query
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import timedelta, datetime
+from os import environ
 
 
 """ Setup app and database """
@@ -11,14 +12,19 @@ app.secret_key = "a76&ohljasdt7&jYUHas/(jasdu"
 
 database = create_connection("database.db")
 
+environ["printQuerys"] = "False"
+environ["printQueryResult"] = "False"
+
+
 @app.route("/")
 @login_required
 def index():
+    """ Show all of the user's buttons """
     # Template name
     template = "index.html"
 
     # Get all the buttons that correspond to this user
-    buttons = execute_fetch_query(database, "SELECT * FROM buttons WHERE user_id=?", session["user_id"])
+    buttons = execute_fetch_query(database, "SELECT * FROM buttons WHERE user_id=?;", session["user_id"])
 
     # Render main page with all the user's buttons
     return render_template(template, buttons=buttons)
@@ -39,16 +45,18 @@ def login():
 
         # Error checking
         if not username or not password:
-            return msg(template, "Invalid credentials", "warning")
+            flash("Invalid credentials")
+            return render_template(template)
 
         # Get data from this user
-        dbRow = execute_fetch_query(database, "SELECT * FROM users WHERE username=?;", username)
+        user_dict_list = execute_fetch_query(database, "SELECT * FROM users WHERE username=?;", username)
         # Check if passwords match and username exists
-        if len(dbRow) != 1 or not check_password_hash(dbRow[0][2], password):
-            return msg(template, "Invalid credentials", "danger")
+        if len(user_dict_list) != 1 or not check_password_hash(user_dict_list[0]["password"], password):
+            flash("Invalid credentials")
+            return render_template(template)
         
         # Save user id
-        session["user_id"] = dbRow[0][0]
+        session["user_id"] = user_dict_list[0]["id"]
 
         # Redirect user to index
         return redirect("/")
@@ -71,11 +79,14 @@ def register():
 
         # Error checking
         if not username or not password or not confirmation:
-            return msg(template, "Provide valid credentials", "warning")
+            flash("Provide valid credentials")
+            return render_template(template)
         if password != confirmation:
-            return msg(template, "Confirmation must match password", "warning")
+            flash("Confirmation must match password")
+            return render_template(template)
         if execute_fetch_query(database, "SELECT username FROM users WHERE username=?;", username):
-            return msg(template, "Username already exists", "danger")
+            flash("Username already exists")
+            return render_template(template)
 
         # Hash password
         password = generate_password_hash(password)
@@ -87,7 +98,7 @@ def register():
         tmpid = execute_fetch_query(database, "SELECT id FROM users WHERE username=?;", username)
 
         # Store session
-        session["user_id"] = tmpid[0][0]
+        session["user_id"] = tmpid[0]["id"]
 
         # Redirect user to index
         return redirect("/")
@@ -108,32 +119,55 @@ def logout():
 @app.route("/update", methods=["POST"])
 @login_required
 def update():
-    """ Update the page """
+    """ Update the page's buttons """
+    # Get data from the form
+    name = request.form.get("name")
+    timespan = request.form.get("timespan")
+    multiplier = request.form.get("multiplier")
+    color = request.form.get("color")
 
-    if request.method == "POST":
-        
-        # Get data from the form
-        button_name = request.form.get("name")
-        timespan = request.form.get("timespan")
-        multiplier = request.form.get("multiplier")
-        button_color = request.form.get("color")
+    # Check for none
+    if not multiplier:
+        multiplier = 0
+    else:
+        multiplier = int(multiplier)
 
-        # Error check
-        if not button_name or not timespan or not multiplier:
-            flash("Invalid arguments", "danger")
-            return redirect("/")
-
-        # Insert data into buttons database
-        execute_query(database, "INSERT INTO buttons (user_id, button_name, timespan, multiplier, color) VALUES (?, ?, ?, ?, ?);", 
-                      session["user_id"], button_name, timespan, multiplier, button_color)
-
-        # Render main page with all the user's buttons
+    # Error check
+    if not name or not timespan:
+        flash("Invalid arguments")
         return redirect("/")
 
-    
+    # Insert data into buttons database
+    execute_query(database, "INSERT INTO buttons (user_id, name, timespan, multiplier, color) VALUES (?, ?, ?, ?, ?);", 
+                  session["user_id"], name, timespan, multiplier, color)
+
+    # Render main page with all the user's buttons
+    return redirect("/")
 
 
+@app.route("/update_count", methods=["POST"])
+@login_required
+def update_count():
+    """ Update the count every press usin AJAX """
+    # Get id from form submit
+    button_id = request.form.get("button_id")
 
+    # Get the current count from the database
+    count_dict_list = execute_fetch_query(database, "SELECT count FROM buttons WHERE button_id=?;", button_id)
+
+    curr_count = int(count_dict_list[0]['count'])
+
+    # Increment the count
+    curr_count += 1
+
+    # Update the count
+    execute_query(database, "UPDATE buttons SET count=? WHERE button_id=?;", curr_count, button_id)
+
+    # Return a JSON object to the AJAX call
+    return jsonify({"count" : curr_count})
+
+
+# Execute application
 if __name__ == "__main__":
     app.run(debug=True)
 

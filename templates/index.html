@@ -5,15 +5,6 @@
 {% endblock %}
 
 {% block main %}
-    <!-- Button trigger modal -->
-    
-        <!-- old button
-        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#exampleModalCenter">
-        Add button
-        </button>
-        -->
-
-
     <!-- Modal -->
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -21,7 +12,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">Add button</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true" style="color: white;">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
@@ -29,27 +20,27 @@
                     <form action="/update" method="post" name="add-button">
                         <div class="form-group">
                             <label for="name">Button name:</label>
-                            <input autocomplete="off" autofocus class="form-control" name="name" id="name" maxlength="30" placeholder="My little button" type="text">
+                            <input autocomplete="off" autofocus class="form-control" name="name" id="name" maxlength="16" placeholder="My little button" type="text" required>
                         </div>
                         <div class="form-group">
                             <label for="timespan">Timespan:</label>
-                            <select class="form-control" name="timespan" id="timespan">
-                                <option value="manualreset">Manual Reset</option>
+                            <select class="form-control" name="timespan" id="timespan" required>
                                 <option value="days">Days</option>
                                 <option value="weeks">Weeks</option>
                                 <option value="months">Months</option>
                                 <option value="years">Years</option>
+                                <option value="manualreset">Manual Reset</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="multiplier">Multiplier:</label>
-                            <input type="number" min="1" name="multiplier" id="multiplier">
+                            <input type="number" min="1" max="999" name="multiplier" id="multiplier" value="0">
                         </div>
                         <div class="form-group">
                             <label for="color">Color:</label>
                             <input type="color" name="color" id="color">
                         </div>
-                        <button id="addButton" class="btn btn-primary" type="submit">Add</button>
+                        <button id="add-button" class="btn btn-primary" type="submit">Add</button>
                     </form>
                 </div>
             </div>
@@ -57,27 +48,39 @@
     </div>
 
 
-    <!-- User's buttons -->
+    <!-- Buttons -->
     <div class="buttons">
-        <button class="button" data-toggle="modal" data-target="#exampleModalCenter" style="background-color: red;">
-            <h3>ADD BUTTON</h3>
-        </button>
+        <!-- Main button (add) -->
+        <div class="main-button m-4">
+            <button class="button" data-toggle="modal" data-target="#exampleModalCenter" style="background-color: red;">
+                <h3 style="top: 35%;">ADD BUTTON</h3>
+            </button>
+        </div>
+        <!-- User's buttons -->
         {% if buttons %}
             {% for button in buttons %}
-                <!-- User's buttons 
-                <div class="container">
-                    <h1>{{button[0]}} {{button[1]}} {{button[2]}} {{button[3]}} {{button[4]}}</h1>
+                <div class="user-button m-4">
+                    <button class="remove-button">&times;</button>
+                    <button button_id="{{button['button_id']}}" class="button update-button"  style="background-color: {{button['color']}};">
+                        {% if button['name'] | length >= 10 %}
+                            <h3 style="top: 35%;">{{button['name']}}</h3>
+                        {% else %}
+                            <h3>{{button['name']}}</h3>
+                        {% endif %}
+                    </button>
+                    <div class="button-foot">
+                        <span><h3 class="counter mt-3">Count:</h3> <h3 class="counter" id="count{{button['button_id']}}">{{button['count']}}</h3></span>
+                        {% if button['timespan'] != "manualreset" %}
+                            <h3>Resets every {{button['multiplier']}} {{button['timespan']}}</h3>
+                            <button class="btn btn-primary btn-dark reset">Reset</button>
+                        {% else %}
+                            <h3>Resets manually</h3>
+                            <button class="btn btn-primary btn-dark reset">Reset</button>
+                        {% endif %}
+                    </div>
                 </div>
-                -->
-                <form action="/update" method="POST">
-                        <!-- User's buttons 
-                        <input class="contained-image" type="image" src="static/images/red_button.png">
-                        -->
-                        <button id="{{ button }}" class="button" type="submit" style="background-color: {{ button[4] }};">
-                            <h3>{{button[1]}}</h3>
-                        </button>
-                </form>
             {% endfor %}
         {% endif %}
+        <audio id="click-sound" src="static/audio/shortkey.wav"></audio>
     </div>
 {% endblock %}
