@@ -56,6 +56,12 @@ nav
     display: inline-block;
 }
 
+.account-button {
+    background-color: transparent;
+    border: none;
+    color: white;
+}
+
 
 /* buttons */
 .buttons {
@@ -65,8 +71,8 @@ nav
 }
 
 .button {
-    justify-content: center;
     flex-wrap: wrap;
+    justify-content: center;
     position: relative;
     @include size(250px, 250px);
     margin: 10px;
@@ -101,9 +107,9 @@ nav
 }
 
 .remove-button {
-    position: relative;
+    display: block;
+    float: right;
     border: none;
-    @include size(5%, 5%);
     background-color: red;
     color: white;
 }

@@ -1,5 +1,5 @@
-from flask import render_template, redirect, Flask, session, request, url_for, flash, jsonify
-from functions import login_required, msg
+from flask import render_template, redirect, Flask, session, request, url_for, flash, jsonify, make_response
+from functions import login_required
 from sqlitetools import create_connection, execute_query, execute_fetch_query
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import timedelta, datetime
@@ -12,8 +12,8 @@ app.secret_key = "a76&ohljasdt7&jYUHas/(jasdu"
 
 database = create_connection("database.db")
 
-environ["printQuerys"] = "False"
-environ["printQueryResult"] = "False"
+environ["printQuerys"] = "True"
+environ["printQueryResult"] = "True."
 
 
 @app.route("/")
@@ -111,8 +111,81 @@ def logout():
     """ Log out the user """
     # Forget any user id's
     session.clear()
-    
     # Redirect user to login
+    return redirect("/login")
+
+
+@app.route("/account")
+@login_required
+def account():
+    """ Show a menu with account options """
+    template = "account.html"
+    return render_template(template)
+
+
+@app.route("/reset", methods=["POST"])
+@login_required
+def reset():
+    """ Reset the button with the given id """
+    # Get the button's id
+    button_id = request.form.get("button_id")
+
+    # Update the button's count
+    execute_query(database, "UPDATE buttons SET count=0 WHERE button_id=?;", button_id)
+
+    # Send data to AJAX call
+    return jsonify({"count" : 0})
+
+
+@app.route("/remove", methods=["POST"])
+@login_required
+def remove():
+    """ Reset the button with the given id """
+    # Get the button's id
+    button_id = request.form.get("button_id")
+
+    # Update the button's count
+    execute_query(database, "DELETE FROM buttons WHERE button_id=?;", button_id)
+
+    # Send junk to AJAX call
+    return jsonify({"result" : "success"})
+
+
+@app.route("/reset_buttons", methods=["POST"])
+@login_required
+def reset_buttons():
+    """ Reset the count of all user's buttons """
+    # Set count to 0 in the database
+    execute_query(database, "UPDATE buttons SET count=0 WHERE user_id=?;", session["user_id"])
+    flash("Successfully reset the count of all buttons")
+    return redirect("/")
+
+
+@app.route("/delete_buttons", methods=["POST"])
+@login_required
+def delete_buttons():
+    """ Delete all of the user's buttons """
+    # Delete all buttons in the database
+    execute_query(database, "DELETE FROM buttons WHERE user_id=?;", session["user_id"])
+    flash("Successfully deleted all buttons")
+    return redirect("/")
+
+
+@app.route("/change_password", methods=["POST"])
+@login_required
+def change_password():
+    return redirect("/")
+
+
+@app.route("/delete_account", methods=["POST"])
+@login_required
+def delete_account ():
+    """ Delete user's account from the database """
+    # Delete account from the database
+    execute_query(database, "DELETE FROM users WHERE id=?;", session["user_id"])
+    # Delete buttons from the database too
+    execute_query(database, "DELETE FROM buttons WHERE user_id=?;", session["user_id"])
+    flash("Successfully deleted all account data")
     return redirect("/login")
 
 
@@ -148,7 +221,7 @@ def update():
 @app.route("/update_count", methods=["POST"])
 @login_required
 def update_count():
-    """ Update the count every press usin AJAX """
+    """ Update the count every press using AJAX """
     # Get id from form submit
     button_id = request.form.get("button_id")
 
@@ -166,6 +239,25 @@ def update_count():
     # Return a JSON object to the AJAX call
     return jsonify({"count" : curr_count})
 
+
+@app.errorhandler(400)
+def bad_request():
+    """ Page not found """
+    flash("400 error, bad request")
+    return make_response(redirect("/"), 400)
+
+
+@app.errorhandler(404)
+def not_found():
+    """ Page not found """
+    flash("404 error, could not find page")
+    return make_response(redirect("/"), 404)
+
+@app.errorhandler(500)
+def server_error():
+    """ Page not found """
+    flash("500 error, internal server error")
+    return make_response(redirect("/"), 500)
 
 # Execute application
 if __name__ == "__main__":

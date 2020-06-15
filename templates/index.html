@@ -10,7 +10,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Add button</h5>
+                    <h5 class="modal-title" id="exampleModalLongTitle">Add new button</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true" style="color: white;">&times;</span>
                     </button>
@@ -25,20 +25,22 @@
                         <div class="form-group">
                             <label for="timespan">Timespan:</label>
                             <select class="form-control" name="timespan" id="timespan" required>
+                                <option value="manualreset">Manual Reset</option>
+                                <!-- Work in progress
                                 <option value="days">Days</option>
                                 <option value="weeks">Weeks</option>
                                 <option value="months">Months</option>
                                 <option value="years">Years</option>
-                                <option value="manualreset">Manual Reset</option>
+                                 -->
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="multiplier">Multiplier:</label>
-                            <input type="number" min="1" max="999" name="multiplier" id="multiplier" value="0">
+                            <input type="number" min="1" max="999" name="multiplier" id="multiplier" value="0" disabled>
                         </div>
                         <div class="form-group">
                             <label for="color">Color:</label>
-                            <input type="color" name="color" id="color">
+                            <input type="color" name="color" id="color" value="#ff0000">
                         </div>
                         <button id="add-button" class="btn btn-primary" type="submit">Add</button>
                     </form>
@@ -59,23 +61,29 @@
         <!-- User's buttons -->
         {% if buttons %}
             {% for button in buttons %}
-                <div class="user-button m-4">
-                    <button class="remove-button">&times;</button>
-                    <button button_id="{{button['button_id']}}" class="button update-button"  style="background-color: {{button['color']}};">
-                        {% if button['name'] | length >= 10 %}
-                            <h3 style="top: 35%;">{{button['name']}}</h3>
-                        {% else %}
-                            <h3>{{button['name']}}</h3>
-                        {% endif %}
-                    </button>
+                <div class="user-button m-4" id="{{button['button_id']}}">
+                    <div class="button-head">
+                        <button button_id="{{button['button_id']}}" class="button update-button"  style="background-color: {{button['color']}};">
+                            {% if button['name'] | length >= 10 %}
+                                <h3 style="top: 35%;">{{button['name']}}</h3>
+                            {% else %}
+                                <h3>{{button['name']}}</h3>
+                            {% endif %}
+                        </button>
+                        <!-- Work in progress
+                        <button class="remove-button">&times;</button>
+                        -->
+                    </div>
                     <div class="button-foot">
-                        <span><h3 class="counter mt-3">Count:</h3> <h3 class="counter" id="count{{button['button_id']}}">{{button['count']}}</h3></span>
+                        <span><h3 class="counter mt-2">Count:</h3> <h3 class="counter" id="count{{button['button_id']}}">{{button['count']}}</h3></span>
                         {% if button['timespan'] != "manualreset" %}
                             <h3>Resets every {{button['multiplier']}} {{button['timespan']}}</h3>
                             <button class="btn btn-primary btn-dark reset">Reset</button>
                         {% else %}
-                            <h3>Resets manually</h3>
-                            <button class="btn btn-primary btn-dark reset">Reset</button>
+                            <br>
+                            <button class="btn btn-primary btn-dark reset" button_id="{{button['button_id']}}">Reset</button>
+                            <br>
+                            <button class="btn btn-primary btn-danger remove m-2" button_id="{{button['button_id']}}">Remove</button>
                         {% endif %}
                     </div>
                 </div>

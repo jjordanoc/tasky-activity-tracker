@@ -20,6 +20,48 @@ $(document).ready(function() {
         });
     });
 
+    $('.reset').click(function() {
+
+        // Retrieve the button id
+        let button_id = $(this).attr('button_id');
+
+        // Post the data to the server
+        req = $.ajax({
+            url : '/reset',
+            type : 'POST',
+            data : { button_id : button_id },
+        });
+
+        // Update the DOM with data recieved from the server
+        req.done(function(data) {
+
+            $('#count'+button_id).text(data.count);
+
+        });
+
+    });
+
+    $('.remove').click(function() {
+
+        // Retrieve the button id
+        let button_id = $(this).attr('button_id');
+
+        // Post the data to the server
+        req = $.ajax({
+            url : '/remove',
+            type : 'POST',
+            data : { button_id : button_id },
+        });
+
+        // Update the DOM
+        req.done(function() {
+
+            $('#'+button_id).fadeOut(1000);
+
+        });
+
+    });
+
     // Play click sound on button click
     $('.button').click(function () { 
         
