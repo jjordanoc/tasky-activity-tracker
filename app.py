@@ -12,10 +12,6 @@ app.secret_key = "a76&ohljasdt7&jYUHas/(jasdu"
 
 database = create_connection("database.db")
 
-environ["printQuerys"] = "True"
-environ["printQueryResult"] = "True."
-
-
 @app.route("/")
 @login_required
 def index():
