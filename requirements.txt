@@ -1,0 +1,4 @@
+Flask
+requests
+sqlite3
+gunicorn
