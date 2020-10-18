@@ -3,13 +3,19 @@
     height: $height;
 }
 
+$p_font: 'Major Mono Display', monospace;
+$s_font: 'Open Sans', sans-serif;
+
+$b_color: white;
+$t_color: black;
+
 /* basic overrides */
 body
 {
     /* override Bootstrap's settings */
-    background-color: black;
-    color: white;
-    font-family: 'Special Elite', cursive;
+    background-color: $b_color;
+    color: $t_color;
+    font-family: $p_font;
 }
 
 main .form-control
@@ -40,12 +46,12 @@ main img
 /* especific overrides */
 nav
 {
-    border-bottom: 0.3em solid white;
+    border-bottom: 0.3em solid $t_color;
 }
 
 .modal-content
 {
-    background-color: black;
+    background-color: $b_color;
 }
 
 .alert {
@@ -59,7 +65,47 @@ nav
 .account-button {
     background-color: transparent;
     border: none;
-    color: white;
+    color: $t_color;
+}
+
+.nav-link {
+    color: $t_color;
+    font-family: $s_font;
+}
+
+.navbar-brand {
+    color: $t_color;
+    user-select: none;
+    font-size: 2.5em;
+}
+
+.s_font {
+    font-family: $s_font;
+}
+
+.form-group {
+    margin-top: 33px;
+    margin-bottom: 33px;
+}
+
+.btn-primary {
+    background-color: $b_color;
+    color: $t_color;
+    border: 5px solid $t_color;
+    border-radius: 5%;
+    padding: 12px;
+}
+
+.btn-primary:hover {
+    background-color: $t_color;
+    color: $b_color;
+    border: 5px solid $b_color;
+    border-radius: 5%;
+}
+
+.msg {
+    color: $b_color;
+    background-color: $t_color;
 }
 
 
@@ -95,7 +141,7 @@ nav
 .button h3
 {
     position: absolute;
-    color: white;
+    color: $t_color;
     user-select: none;
     top: 40%;
     left: 20%;
@@ -111,5 +157,5 @@ nav
     float: right;
     border: none;
     background-color: red;
-    color: white;
+    color: $t_color;
 }

@@ -56,7 +56,7 @@ $(document).ready(function() {
         // Update the DOM
         req.done(function() {
 
-            $('#'+button_id).fadeOut(1000);
+            $('#'+button_id).fadeOut(500);
 
         });
 

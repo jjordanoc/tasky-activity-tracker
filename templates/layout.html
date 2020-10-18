@@ -8,29 +8,30 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
         <link rel="stylesheet" href="static/styles/styles.css">
         <link rel="icon" href="static/images/favicon.png">
-        <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Chelsea+Market&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Love+Ya+Like+A+Sister&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;1,600&display=swap" rel="stylesheet">
         <script src="https://kit.fontawesome.com/37c483c4af.js" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg navbar-dark main-nav">
-            <a class="navbar-brand p-3" href="/"><img src="static/images/logo.png"></a>
-            <span aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbar" data-toggle="collapse" type="button">   
-                <i class="fas fa-bars" style="color:#fff; font-size:28px;"></i>
-            </span>
+        <nav class="navbar navbar-expand-lg navbar-light main-nav">
+            
+            <a class="navbar-brand p-3" href="/" style="color: black;">TASKY</a>
+            
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
             <div class="collapse navbar-collapse" id="navbar">
                 {% if session.user_id %}
                     <ul class="navbar-nav ml-auto mt-2 pl-3">
-                        <li class="nav-item"><a class="nav-link" style="color: white;" href="/account">ACCOUNT</a></li>
-                        <li class="nav-item"><a class="nav-link" style="color: white;" href="/logout">LOG OUT</a></li>
+                        <li class="nav-item"><a class="nav-link" style="color: black;" href="/account">ACCOUNT</a></li>
+                        <li class="nav-item"><a class="nav-link" style="color: black;" href="/logout">LOG OUT</a></li>
                     </ul>
                 {% else %}
                     <ul class="navbar-nav ml-auto mt-2 pl-3">
-                        <li class="nav-item"><a class="nav-link white" style="color: white;" href="/register">REGISTER</a></li>
-                        <li class="nav-item"><a class="nav-link" style="color: white;" href="/login">LOG IN</a></li>
+                        <li class="nav-item"><a class="nav-link" style="color: black;" href="/register">REGISTER</a></li>
+                        <li class="nav-item"><a class="nav-link" style="color: black;" href="/login">LOG IN</a></li>
                     </ul>
                 {% endif %}
             </div>
@@ -41,11 +42,11 @@
             {% if messages %}
                 {% for message in messages %}
                     <header>
-                        <div class="alert alert-light alert-dismissible fade show border text-center" role="alert">
+                        <div class="alert alert-light alert-dismissible fade show border text-center msg" role="alert">
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
-                            <span style="color: black;">{{message}}</span>
+                            <span>{{message}}</span>
                         </div>
                     </header>
                 {% endfor %}

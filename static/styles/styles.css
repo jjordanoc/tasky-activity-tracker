@@ -1,9 +1,9 @@
 /* basic overrides */
 body {
   /* override Bootstrap's settings */
-  background-color: black;
-  color: white;
-  font-family: 'Special Elite', cursive;
+  background-color: white;
+  color: black;
+  font-family: "Major Mono Display", monospace;
 }
 
 main .form-control {
@@ -27,11 +27,11 @@ main img {
 
 /* especific overrides */
 nav {
-  border-bottom: 0.3em solid white;
+  border-bottom: 0.3em solid black;
 }
 
 .modal-content {
-  background-color: black;
+  background-color: white;
 }
 
 .alert {
@@ -45,7 +45,50 @@ nav {
 .account-button {
   background-color: transparent;
   border: none;
+  color: black;
+}
+
+.nav-link {
+  color: black;
+  font-family: "Open Sans", sans-serif;
+}
+
+.navbar-brand {
+  color: black;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  font-size: 2.5em;
+}
+
+.s_font {
+  font-family: "Open Sans", sans-serif;
+}
+
+.form-group {
+  margin-top: 33px;
+  margin-bottom: 33px;
+}
+
+.btn-primary {
+  background-color: white;
+  color: black;
+  border: 5px solid black;
+  border-radius: 5%;
+  padding: 12px;
+}
+
+.btn-primary:hover {
+  background-color: black;
   color: white;
+  border: 5px solid white;
+  border-radius: 5%;
+}
+
+.msg {
+  color: white;
+  background-color: black;
 }
 
 /* buttons */
@@ -92,7 +135,7 @@ nav {
 
 .button h3 {
   position: absolute;
-  color: white;
+  color: black;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
@@ -111,6 +154,6 @@ nav {
   float: right;
   border: none;
   background-color: red;
-  color: white;
+  color: black;
 }
 /*# sourceMappingURL=styles.css.map */
