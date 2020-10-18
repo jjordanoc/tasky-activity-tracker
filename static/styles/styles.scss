@@ -108,7 +108,6 @@ nav
     background-color: $t_color;
 }
 
-
 /* buttons */
 .buttons {
     display:         flex;
@@ -150,12 +149,4 @@ nav
 
 .button-foot {
     position: relative;
-}
-
-.remove-button {
-    display: block;
-    float: right;
-    border: none;
-    background-color: red;
-    color: $t_color;
 }

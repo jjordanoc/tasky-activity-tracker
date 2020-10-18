@@ -148,12 +148,4 @@ nav {
 .button-foot {
   position: relative;
 }
-
-.remove-button {
-  display: block;
-  float: right;
-  border: none;
-  background-color: red;
-  color: black;
-}
 /*# sourceMappingURL=styles.css.map */

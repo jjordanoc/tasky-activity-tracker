@@ -15,7 +15,7 @@ database = create_connection("database.db")
 @app.route("/")
 @login_required
 def index():
-    """ Show all of the user's buttons """
+    """ Show user's buttons and update current state if needed"""
     # Template name
     template = "index.html"
 
@@ -153,7 +153,7 @@ def reset_buttons():
     """ Reset the count of all user's buttons """
     # Set count to 0 in the database
     execute_query(database, "UPDATE buttons SET count=0 WHERE user_id=?;", session["user_id"])
-    flash("Successfully reset the count of all buttons")
+    flash("Successfully reset all buttons")
     return redirect("/")
 
 
