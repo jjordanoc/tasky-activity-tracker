@@ -91,6 +91,14 @@ nav {
   background-color: black;
 }
 
+.login-info {
+  font-family: "Open Sans", sans-serif;
+  font-style: bold;
+  margin-top: 10px;
+  margin-bottom: 15px;
+  font-size: 1.2em;
+}
+
 /* buttons */
 .buttons {
   display: -webkit-box;

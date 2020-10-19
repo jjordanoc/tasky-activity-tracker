@@ -2,8 +2,8 @@ from flask import render_template, redirect, Flask, session, request, url_for, f
 from functions import login_required
 from sqlitetools import create_connection, execute_query, execute_fetch_query
 from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import timedelta, datetime
 from os import environ
+import datetime
 
 
 """ Setup app and database """
@@ -21,6 +21,55 @@ def index():
 
     # Get all the buttons that correspond to this user
     buttons = execute_fetch_query(database, "SELECT * FROM buttons WHERE user_id=?;", session["user_id"])
+
+    # Get current date in YYYY-MM-DD format
+    curr_date = datetime.date.today()
+    
+    # Iterate over all buttons to reset expired ones
+    for button in buttons:
+        rd_str = button['reset_date']
+        print(rd_str)
+        # If reset date is not set to manual
+        if rd_str != "Manual":
+            button_id = button['button_id']
+            # Transform given date from string to date type
+            reset_date = datetime.datetime.strptime(rd_str, "%Y-%m-%d").date()
+            delta = reset_date-curr_date
+            print(delta)
+            # If delta days is negative or equal to 0, it means the current date is greater than or equal to the reset date, thus, we reset the button
+            if delta.days <= 0:
+
+                # Reset count
+                print("Resetting count...")
+                execute_query(database, "UPDATE buttons SET count=0 WHERE button_id=?;", button_id)
+
+                #Once count is reset, calculate new reset date
+                multiplier = button['multiplier']
+                timespan = button['timespan']
+                
+                # Get delta needed according to multiplier
+                newDelta = None
+                if timespan == "days":
+                    newDelta = datetime.timedelta(days=multiplier)
+                elif timespan == "weeks":
+                    newDelta = datetime.timedelta(weeks=multiplier)
+                elif timespan == "months":
+                    newDelta = datetime.timedelta(weeks=multiplier*4.35)
+                elif timespan == "years":
+                    newDelta = datetime.timedelta(weeks=multiplier*4.35*12)
+
+                newReset_date = "Manual"
+                if delta:
+                    newReset_date = curr_date + newDelta
+                    newReset_date = str(newReset_date)
+                
+                # Update new reset date into the database
+                execute_query(database, "UPDATE buttons SET reset_date=? WHERE button_id=?;", newReset_date, button['button_id'])
+
+            else:
+                print("Not resetting button")
+        else:
+            print("Passing")
 
     # Render main page with all the user's buttons
     return render_template(template, buttons=buttons)
@@ -116,7 +165,10 @@ def logout():
 def account():
     """ Show a menu with account options """
     template = "account.html"
-    return render_template(template)
+    # Get username
+    username = execute_fetch_query(database, "SELECT username FROM users WHERE id=?", session['user_id'])
+    username = username[0]['username']
+    return render_template(template, username=username)
 
 
 @app.route("/reset", methods=["POST"])
@@ -167,10 +219,37 @@ def delete_buttons():
     return redirect("/")
 
 
-@app.route("/change_password", methods=["POST"])
+@app.route("/change_password", methods=["POST", "GET"])
 @login_required
 def change_password():
-    return redirect("/")
+    """ Let the user change his password """
+    template = "change.html"
+
+    if request.method == "POST":
+        # Get data from the form
+        password = request.form.get("password")
+        confirmation = request.form.get("confirmation")
+
+        # Error checking
+        if not password or not confirmation:
+            flash("Provide valid credentials")
+            return render_template(template)
+        if password != confirmation:
+            flash("Confirmation must match new password")
+            return render_template(template)
+
+        # Hash password
+        password = generate_password_hash(password)
+
+        # Insert user data into the database
+        execute_query(database, "UPDATE users SET password=? WHERE id=?;", password, session["user_id"])
+
+        flash("Successfully changed password")
+        # Redirect user to index
+        return redirect("/")
+
+    else:
+        return render_template(template)
 
 
 @app.route("/delete_account", methods=["POST"])
@@ -206,9 +285,27 @@ def update():
         flash("Invalid arguments")
         return redirect("/")
 
+    # Get current date
+    curr_date = datetime.date.today()
+    # Get delta needed according to multiplier
+    delta = None
+    if timespan == "days":
+        delta = datetime.timedelta(days=multiplier)
+    elif timespan == "weeks":
+        delta = datetime.timedelta(weeks=multiplier)
+    elif timespan == "months":
+        delta = datetime.timedelta(weeks=multiplier*4.35)
+    elif timespan == "years":
+        delta = datetime.timedelta(weeks=multiplier*4.35*12)
+
+    reset_date = "Manual"
+    if delta:
+        reset_date = curr_date + delta
+        reset_date = str(reset_date)
+
     # Insert data into buttons database
-    execute_query(database, "INSERT INTO buttons (user_id, name, timespan, multiplier, color) VALUES (?, ?, ?, ?, ?);", 
-                  session["user_id"], name, timespan, multiplier, color)
+    execute_query(database, "INSERT INTO buttons (user_id, name, timespan, multiplier, color, reset_date) VALUES (?, ?, ?, ?, ?, ?);", 
+                  session["user_id"], name, timespan, multiplier, color, reset_date)
 
     # Render main page with all the user's buttons
     return redirect("/")

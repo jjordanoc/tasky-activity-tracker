@@ -108,6 +108,15 @@ nav
     background-color: $t_color;
 }
 
+.login-info {
+    font-family: $s_font;
+    font-style: bold;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+}
+
+
 /* buttons */
 .buttons {
     display:         flex;

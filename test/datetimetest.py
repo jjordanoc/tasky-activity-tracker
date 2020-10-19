@@ -1,8 +1,28 @@
 import datetime
 import pytz
 
-dt_utcnow = datetime.datetime.now(tz=pytz.UTC)
-print(dt_utcnow)
+x = datetime.date(2016, 10, 12)
+today = datetime.date.today()
+print(x.day-today.day)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 """
 # Get current date y-m-d
