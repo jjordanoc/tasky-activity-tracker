@@ -44,7 +44,7 @@ def index():
                 execute_query(database, "UPDATE buttons SET count=0 WHERE button_id=?;", button_id)
 
                 #Once count is reset, calculate new reset date
-                multiplier = button['multiplier']
+                multiplier = int(button['multiplier'])
                 timespan = button['timespan']
                 
                 # Get delta needed according to multiplier
@@ -59,7 +59,7 @@ def index():
                     newDelta = datetime.timedelta(weeks=multiplier*4.35*12)
 
                 newReset_date = "Manual"
-                if delta:
+                if newDelta:
                     newReset_date = curr_date + newDelta
                     newReset_date = str(newReset_date)
                 
