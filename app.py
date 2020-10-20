@@ -169,8 +169,8 @@ def account():
     username = execute_fetch_query(database, "SELECT username FROM users WHERE id=?;", session['user_id'])
     # Error check
     if not username:
-        flash("Log in error, please reload the page")
-        return render_template(template)
+        flash("Log in error, please log-in again")
+        return redirect("/login")
     # Get the username
     username = username[0]['username']
     return render_template(template, username=username)
