@@ -166,7 +166,7 @@ def account():
     """ Show a menu with account options """
     template = "account.html"
     # Get username
-    username = execute_fetch_query(database, "SELECT username FROM users WHERE id=?", session['user_id'])
+    username = execute_fetch_query(database, "SELECT username FROM users WHERE id=?;", session['user_id'])
     username = username[0]['username']
     return render_template(template, username=username)
 
