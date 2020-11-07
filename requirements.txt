@@ -2,3 +2,4 @@ Flask
 requests
 gunicorn
 datetime
+psycopg2-binary
