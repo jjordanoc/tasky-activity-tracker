@@ -42,7 +42,7 @@ def index():
     template = "index.html"
 
     # Get all the buttons that correspond to this user
-    buttons = execute_fetch_query(database, "SELECT * FROM buttons WHERE user_id=?;", session["user_id"])
+    buttons = execute_fetch_query(database, "SELECT * FROM buttons WHERE user_id=%s;", session["user_id"])
 
     # Get current date in YYYY-MM-DD format
     curr_date = datetime.date.today()
@@ -63,7 +63,7 @@ def index():
 
                 # Reset count
                 print("Resetting count...")
-                execute_query(database, "UPDATE buttons SET count=0 WHERE button_id=?;", button_id)
+                execute_query(database, "UPDATE buttons SET count=0 WHERE button_id=%s;", button_id)
 
                 #Once count is reset, calculate new reset date
                 multiplier = int(button['multiplier'])
@@ -86,7 +86,7 @@ def index():
                     newReset_date = str(newReset_date)
 
                 # Update new reset date into the database
-                execute_query(database, "UPDATE buttons SET reset_date=? WHERE button_id=?;", newReset_date, button['button_id'])
+                execute_query(database, "UPDATE buttons SET reset_date=%s WHERE button_id=%s;", newReset_date, button['button_id'])
 
             else:
                 print("Not resetting button")
@@ -116,7 +116,7 @@ def login():
             return render_template(template)
 
         # Get data from this user
-        user_dict_list = execute_fetch_query(database, "SELECT * FROM users WHERE username=?;", username)
+        user_dict_list = execute_fetch_query(database, "SELECT * FROM users WHERE username=%s;", username)
         # Check if passwords match and username exists
         if len(user_dict_list) != 1 or not check_password_hash(user_dict_list[0]["password"], password):
             flash("Invalid credentials")
@@ -151,7 +151,7 @@ def register():
         if password != confirmation:
             flash("Confirmation must match password")
             return render_template(template)
-        if execute_fetch_query(database, "SELECT username FROM users WHERE username=?;", username):
+        if execute_fetch_query(database, "SELECT username FROM users WHERE username=%s;", username):
             flash("Username already exists")
             return render_template(template)
 
@@ -159,10 +159,10 @@ def register():
         password = generate_password_hash(password)
 
         # Insert user data into the database
-        execute_query(database, "INSERT INTO users (username, password) VALUES (?, ?);", username, password)
+        execute_query(database, "INSERT INTO users (username, password) VALUES (%s, %s);", username, password)
 
         # Check if session is valid
-        tmpid = execute_fetch_query(database, "SELECT id FROM users WHERE username=?;", username)
+        tmpid = execute_fetch_query(database, "SELECT id FROM users WHERE username=%s;", username)
 
         # Store session
         session["user_id"] = tmpid[0]["id"]
@@ -188,7 +188,7 @@ def account():
     """ Show a menu with account options """
     template = "account.html"
     # Get username
-    username = execute_fetch_query(database, "SELECT username FROM users WHERE id=?;", session['user_id'])
+    username = execute_fetch_query(database, "SELECT username FROM users WHERE id=%s;", session['user_id'])
     # Error check
     if not username:
         flash("Log in error, please log-in again")
@@ -206,7 +206,7 @@ def reset():
     button_id = request.form.get("button_id")
 
     # Update the button's count
-    execute_query(database, "UPDATE buttons SET count=0 WHERE button_id=?;", button_id)
+    execute_query(database, "UPDATE buttons SET count=0 WHERE button_id=%s;", button_id)
 
     # Send data to AJAX call
     return jsonify({"count" : 0})
@@ -220,7 +220,7 @@ def remove():
     button_id = request.form.get("button_id")
 
     # Update the button's count
-    execute_query(database, "DELETE FROM buttons WHERE button_id=?;", button_id)
+    execute_query(database, "DELETE FROM buttons WHERE button_id=%s;", button_id)
 
     # Send junk to AJAX call
     return jsonify({"result" : "success"})
@@ -231,7 +231,7 @@ def remove():
 def reset_buttons():
     """ Reset the count of all user's buttons """
     # Set count to 0 in the database
-    execute_query(database, "UPDATE buttons SET count=0 WHERE user_id=?;", session["user_id"])
+    execute_query(database, "UPDATE buttons SET count=0 WHERE user_id=%s;", session["user_id"])
     flash("Successfully reset all buttons")
     return redirect("/")
 
@@ -241,7 +241,7 @@ def reset_buttons():
 def delete_buttons():
     """ Delete all of the user's buttons """
     # Delete all buttons in the database
-    execute_query(database, "DELETE FROM buttons WHERE user_id=?;", session["user_id"])
+    execute_query(database, "DELETE FROM buttons WHERE user_id=%s;", session["user_id"])
     flash("Successfully deleted all buttons")
     return redirect("/")
 
@@ -269,7 +269,7 @@ def change_password():
         password = generate_password_hash(password)
 
         # Insert user data into the database
-        execute_query(database, "UPDATE users SET password=? WHERE id=?;", password, session["user_id"])
+        execute_query(database, "UPDATE users SET password=%s WHERE id=%s;", password, session["user_id"])
 
         flash("Successfully changed password")
         # Redirect user to index
@@ -284,9 +284,9 @@ def change_password():
 def delete_account ():
     """ Delete user's account from the database """
     # Delete account from the database
-    execute_query(database, "DELETE FROM users WHERE id=?;", session["user_id"])
+    execute_query(database, "DELETE FROM users WHERE id=%s;", session["user_id"])
     # Delete buttons from the database too
-    execute_query(database, "DELETE FROM buttons WHERE user_id=?;", session["user_id"])
+    execute_query(database, "DELETE FROM buttons WHERE user_id=%s;", session["user_id"])
     flash("Successfully deleted all account data")
     return redirect("/login")
 
@@ -331,7 +331,7 @@ def update():
         reset_date = str(reset_date)
 
     # Insert data into buttons database
-    execute_query(database, "INSERT INTO buttons (user_id, name, timespan, multiplier, color, reset_date) VALUES (?, ?, ?, ?, ?, ?);",
+    execute_query(database, "INSERT INTO buttons (user_id, name, timespan, multiplier, color, reset_date) VALUES (%s, %s, %s, %s, %s, %s);",
                   session["user_id"], name, timespan, multiplier, color, reset_date)
 
     # Render main page with all the user's buttons
@@ -346,7 +346,7 @@ def update_count():
     button_id = request.form.get("button_id")
 
     # Get the current count from the database
-    count_dict_list = execute_fetch_query(database, "SELECT count FROM buttons WHERE button_id=?;", button_id)
+    count_dict_list = execute_fetch_query(database, "SELECT count FROM buttons WHERE button_id=%s;", button_id)
 
     curr_count = int(count_dict_list[0]['count'])
 
@@ -354,7 +354,7 @@ def update_count():
     curr_count += 1
 
     # Update the count
-    execute_query(database, "UPDATE buttons SET count=? WHERE button_id=?;", curr_count, button_id)
+    execute_query(database, "UPDATE buttons SET count=%s WHERE button_id=%s;", curr_count, button_id)
 
     # Return a JSON object to the AJAX call
     return jsonify({"count" : curr_count})
