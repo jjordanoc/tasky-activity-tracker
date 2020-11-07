@@ -13,13 +13,13 @@ app.secret_key = "a76&ohljasdt7&jYUHas/(jasdu"
 DATABASE_URL = environ['DATABASE_URL']
 database = create_connection(DATABASE_URL)
 
-create_table_users = """CREATE TABLE users (
+create_table_users = """CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     username TEXT NOT NULL,
     password TEXT NOT NULL
 );"""
 
-create_table_buttons = """CREATE TABLE buttons (
+create_table_buttons = """CREATE TABLE IF NOT EXISTS buttons (
     user_id INTEGER,
     name TEXT NOT NULL,
     timespan TEXT NOT NULL,

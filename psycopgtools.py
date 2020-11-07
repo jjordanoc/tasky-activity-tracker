@@ -5,7 +5,7 @@ import os
 Python module to simplify the integration of psycopg2
 by: cooldev_
 """
-    
+
 def create_connection(url):
     try:
         connection = psycopg2.connect(url, sslmode='require')
@@ -38,8 +38,13 @@ def create_connection(url):
 def execute_query(connection, query, *values):
     cursor = connection.cursor()
     try:
-        cursor.execute(query, values)
-        connection.commit()
+        try:
+            cursor.execute(query, values)
+            connection.commit()
+        except:
+            cursor.execute("rollback")
+            cursor.execute(query, values)
+            connection.commit()
         if os.environ.get("printQuerys") == "True":
             print(f"{query}")
     except (Exception, psycopg2.Error) as e:
