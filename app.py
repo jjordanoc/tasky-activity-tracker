@@ -1,6 +1,6 @@
 from flask import render_template, redirect, Flask, session, request, url_for, flash, jsonify, make_response
 from functions import login_required
-from sqlitetools import create_connection, execute_query, execute_fetch_query
+from psycopgtools import create_connection, execute_query, execute_fetch_query
 from werkzeug.security import generate_password_hash, check_password_hash
 from os import environ
 import datetime
@@ -10,7 +10,29 @@ import datetime
 app = Flask("__name__")
 app.secret_key = "a76&ohljasdt7&jYUHas/(jasdu"
 
-database = create_connection("database.db")
+DATABASE_URL = environ['DATABASE_URL']
+database = create_connection(DATABASE_URL)
+
+create_table_users = """CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username TEXT NOT NULL,
+    password TEXT NOT NULL
+);"""
+
+create_table_buttons = """CREATE TABLE buttons (
+    user_id INTEGER,
+    name TEXT NOT NULL,
+    timespan TEXT NOT NULL,
+    multiplier TEXT NOT NULL,
+    color TEXT NOT NULL,
+    reset_date TEXT NOT NULL,
+    count INTEGER DEFAULT 0,
+    button_id SERIAL PRIMARY KEY,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);"""
+
+execute_query(database, create_table_users)
+execute_query(database, create_table_buttons)
 
 @app.route("/")
 @login_required
@@ -24,7 +46,7 @@ def index():
 
     # Get current date in YYYY-MM-DD format
     curr_date = datetime.date.today()
-    
+
     # Iterate over all buttons to reset expired ones
     for button in buttons:
         rd_str = button['reset_date']
@@ -46,7 +68,7 @@ def index():
                 #Once count is reset, calculate new reset date
                 multiplier = int(button['multiplier'])
                 timespan = button['timespan']
-                
+
                 # Get delta needed according to multiplier
                 newDelta = None
                 if timespan == "days":
@@ -62,7 +84,7 @@ def index():
                 if newDelta:
                     newReset_date = curr_date + newDelta
                     newReset_date = str(newReset_date)
-                
+
                 # Update new reset date into the database
                 execute_query(database, "UPDATE buttons SET reset_date=? WHERE button_id=?;", newReset_date, button['button_id'])
 
@@ -99,7 +121,7 @@ def login():
         if len(user_dict_list) != 1 or not check_password_hash(user_dict_list[0]["password"], password):
             flash("Invalid credentials")
             return render_template(template)
-        
+
         # Save user id
         session["user_id"] = user_dict_list[0]["id"]
 
@@ -309,7 +331,7 @@ def update():
         reset_date = str(reset_date)
 
     # Insert data into buttons database
-    execute_query(database, "INSERT INTO buttons (user_id, name, timespan, multiplier, color, reset_date) VALUES (?, ?, ?, ?, ?, ?);", 
+    execute_query(database, "INSERT INTO buttons (user_id, name, timespan, multiplier, color, reset_date) VALUES (?, ?, ?, ?, ?, ?);",
                   session["user_id"], name, timespan, multiplier, color, reset_date)
 
     # Render main page with all the user's buttons
