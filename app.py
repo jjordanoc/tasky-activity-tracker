@@ -10,6 +10,9 @@ import datetime
 app = Flask("__name__")
 app.secret_key = "a76&ohljasdt7&jYUHas/(jasdu"
 
+environ["printQuerys"] = "True"
+environ["printQueryResult"] = "True"
+
 DATABASE_URL = environ['DATABASE_URL']
 database = create_connection(DATABASE_URL)
 
@@ -33,6 +36,7 @@ create_table_buttons = """CREATE TABLE IF NOT EXISTS buttons (
 
 execute_query(database, create_table_users)
 execute_query(database, create_table_buttons)
+
 
 @app.route("/")
 @login_required
