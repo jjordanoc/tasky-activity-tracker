@@ -1,9 +1,9 @@
-# Tasky
+# This is tasky
 
-Tasky is a web application designed to assist your volatile memory.
+And my CS50x final project. It was an amazing experience, and even took part in my decision to study computer science.
 
-Everyone at some point has wondered: How many times did I take a dump this week? or Did I drink water today?
+Tasky is a web application designed to assist your memory.
 
-Why even bother memorizing how many times you shit when you can't even get linear algebra right.
+It will help you count the amount of times you do certain activities like drinking water, counting stars, counting how many red cars pass by. You name it!
 
-Stop counting like an idiot, use Tasky.
+Made by cooldev_ (Joaquín Jordán)
