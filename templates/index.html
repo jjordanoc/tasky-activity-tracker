@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block main %}
-    <!-- Modal -->
+    <!-- Add task modal -->
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -20,18 +20,16 @@
                     <form action="/update" method="post" name="add-button">
                         <div class="form-group">
                             <label for="name">Name:</label>
-                            <input autocomplete="off" autofocus class="form-control" name="name" id="name" maxlength="16" placeholder="MY TASK" type="text" required>
+                            <input autocomplete="off" autofocus class="form-control" name="name" id="name" placeholder="MY TASK" type="text" required>
                         </div>
                         <div class="form-group">
                             <label for="timespan">Timespan:</label>
                             <select class="form-control" name="timespan" id="timespan" required>
                                 <option value="manualreset">Manual Reset</option>
-                                <!-- Work in progress-->
                                 <option value="days">Days</option>
                                 <option value="weeks">Weeks</option>
                                 <option value="months">Months</option>
                                 <option value="years">Years</option>
-                                
                             </select>
                         </div>
                         <div class="form-group">
@@ -55,7 +53,7 @@
         <!-- Main button (add) -->
         <div class="main-button m-4">
             <button class="button" data-toggle="modal" data-target="#exampleModalCenter" style="background-color: white;">
-                <h3 style="top: 35%;">ADD TASK</h3>
+                <h3>ADD TASK</h3>
             </button>
         </div>
         <!-- User's buttons -->
@@ -64,26 +62,23 @@
                 <div class="user-button m-4" id="{{button['button_id']}}">
                     <div class="button-head">
                         <button button_id="{{button['button_id']}}" class="button update-button" style="background-color: {{button['color']}};">
-                            {% if button['name'] | length >= 10 %}
-                                <h3 style="top: 25%;">{{button['name']}}</h3>
-                            {% else %}
-                                <h3>{{button['name']}}</h3>
-                            {% endif %}
+                            <h3>{{button['name']}}</h3>
                         </button>
-                        <!-- Work in progress
-                        <button class="remove-button">&times;</button>
-                        -->
                     </div>
                     <div class="button-foot">
                         <span><h3 class="counter mt-2">Count:</h3> <h3 class="counter" id="count{{button['button_id']}}">{{button['count']}}</h3></span>
                         {% if button['timespan'] != "manualreset" %}
-                            <h3>Resets every {{button['multiplier']}} {{button['timespan']}}</h3>
-                            <button class="btn btn-primary btn-danger remove m-2" id="remove{{button['button_id']}}" button_id="{{button['button_id']}}">Remove</button>
+                            <h3 id="msg{{button['button_id']}}">Resets every {{button['multiplier']}} {{button['timespan']}}</h3>
+                            <div class="util-buttons">
+                                <button class="btn btn-primary btn-primary reset" id="reset{{button['button_id']}}" button_id="{{button['button_id']}}">Reset</button>
+                                <button class="btn btn-primary btn-danger remove m-2" id="remove{{button['button_id']}}" button_id="{{button['button_id']}}">Remove</button>
+                            </div>
                         {% else %}
-                            <br>
-                            <button class="btn btn-primary btn-dark reset" id="reset{{button['button_id']}}" button_id="{{button['button_id']}}">Reset</button>
-                            <br>
-                            <button class="btn btn-primary btn-danger remove m-2" id="remove{{button['button_id']}}" button_id="{{button['button_id']}}">Remove</button>
+                            <h3 id="msg{{button['button_id']}}">Manual reset</h3>
+                            <div class="util-buttons">
+                                <button class="btn btn-primary btn-primary reset" id="reset{{button['button_id']}}" button_id="{{button['button_id']}}">Reset</button>
+                                <button class="btn btn-primary btn-danger remove m-2" id="remove{{button['button_id']}}" button_id="{{button['button_id']}}">Remove</button>
+                            </div>
                         {% endif %}
                     </div>
                 </div>

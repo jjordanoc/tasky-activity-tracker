@@ -21,7 +21,7 @@ def create_connection(url):
         record = cursor.fetchone()
         print("You are connected to - ", record,"\n")
 
-        # Show state of env vars
+        # Print state of env vars
         if environ.get("printQuerys") == "True":
             print("printQuerys set to True")
         else:
@@ -45,7 +45,6 @@ def execute_query(connection, query, *values):
             # Execute query and commit
             cursor.execute(query, values)
             connection.commit()
-            print("Committed")
         except:
             # Rollback and try to execute query again
             cursor.execute("rollback")

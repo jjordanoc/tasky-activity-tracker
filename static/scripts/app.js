@@ -1,7 +1,7 @@
 // Set of various functions
 $(document).ready(function() {
 
-    /* Detect mobile browsers */ 
+    /* Detect mobile browsers */
      /**
      * jQuery.browser.mobile (http://detectmobilebrowser.com/)
      *
@@ -12,7 +12,7 @@ $(document).ready(function() {
     const isMobile = jQuery.browser.mobile;
     console.log(isMobile);
 
-    /* Desktop only functions */ 
+    /* Desktop only functions */
 
     function deskPrep() {
         $('.reset').hide();
@@ -31,9 +31,10 @@ $(document).ready(function() {
         }
         // Retrieve the button id
         let button_id = $(this).attr('id');
+        $('#msg'+button_id).hide(200);
         $('#remove'+button_id).show(200);
         $('#reset'+button_id).show(200);
-        
+
         }, function () {
             // Out
             if (isMobile) {
@@ -41,22 +42,23 @@ $(document).ready(function() {
             }
             // Retrieve the button id
             let button_id = $(this).attr('id');
+            $('#msg'+button_id).show(200);
             $('#remove'+button_id).hide(200);
             $('#reset'+button_id).hide(200);
         }
     );
 
     // Play sound on click
-    $('.button').click(function () { 
+    $('.button').click(function () {
         if(!isMobile) {
             $('#click-sound')[0].play();
         }
     });
 
-    /* End of desktop only functions */ 
+    /* End of desktop only functions */
 
 
-    /* Other functions */ 
+    /* Other functions */
 
     // On update button click perform ajax call to update count
     $('.update-button').on('click', function() {
@@ -120,14 +122,14 @@ $(document).ready(function() {
         });
 
     });
-    
+
     // Close any alert after 4 seconds
     setTimeout (function () {
         $(".alert").alert('close');
     }, 4000)
 
     // Disable multiplier in manual reset mode
-    $('#timespan').click(function() {
+    $('#timespan').change(function() {
         selected = $('#timespan').val();
         if (selected == "manualreset"){
             $('#multiplier').prop("disabled", true);
@@ -136,8 +138,13 @@ $(document).ready(function() {
         }
     });
 
-    /* End of other functions */ 
+    // Lowercase any text in button name
+    $("#name").on('change keyup paste', function(){
+        $(this).val($(this).val().toLowerCase());
+     });
 
-    
+    /* End of other functions */
+
+
 
 });

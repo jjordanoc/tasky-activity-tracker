@@ -10,6 +10,9 @@ import datetime
 app = Flask("__name__")
 app.secret_key = "a76&ohljasdt7&jYUHas/(jasdu"
 
+# Separator for button debugging
+sep = "******************************************"
+
 environ["printQuerys"] = "True"
 environ["printQueryResult"] = "True"
 
@@ -54,22 +57,23 @@ def index():
     # Iterate over all buttons to reset expired ones
     for button in buttons:
         rd_str = button['reset_date']
-        print(rd_str)
+        print(sep)
+        print(button['name'], "resetting on", rd_str)
         # If reset date is not set to manual
         if rd_str != "Manual":
             button_id = button['button_id']
             # Transform given date from string to date type
             reset_date = datetime.datetime.strptime(rd_str, "%Y-%m-%d").date()
             delta = reset_date-curr_date
-            print(delta)
+            print("Time until next reset:", delta)
             # If delta days is negative or equal to 0, it means the current date is greater than or equal to the reset date, thus, we reset the button
             if delta.days <= 0:
 
                 # Reset count
-                print("Resetting count...")
+                print("Delta equals 0, resetting count")
                 execute_query(database, "UPDATE buttons SET count=0 WHERE button_id=%s;", button_id)
 
-                #Once count is reset, calculate new reset date
+                # Once count is reset, calculate new reset date
                 multiplier = int(button['multiplier'])
                 timespan = button['timespan']
 
@@ -88,14 +92,19 @@ def index():
                 if newDelta:
                     newReset_date = curr_date + newDelta
                     newReset_date = str(newReset_date)
+                    print("Resetting again on", newReset_date)
 
                 # Update new reset date into the database
                 execute_query(database, "UPDATE buttons SET reset_date=%s WHERE button_id=%s;", newReset_date, button['button_id'])
+                print(sep)
+                return redirect(url_for('index'))
 
             else:
                 print("Not resetting button")
+                print(sep)
         else:
-            print("Passing")
+            print("Manual reset, passing")
+            print(sep)
 
     # Render main page with all the user's buttons
     return render_template(template, buttons=buttons)
@@ -287,10 +296,13 @@ def change_password():
 @login_required
 def delete_account ():
     """ Delete user's account from the database """
+
+    # Delete buttons from the database first (to avoid primary key errors)
+    execute_query(database, "DELETE FROM buttons WHERE user_id=%s;", session["user_id"])
+
     # Delete account from the database
     execute_query(database, "DELETE FROM users WHERE id=%s;", session["user_id"])
-    # Delete buttons from the database too
-    execute_query(database, "DELETE FROM buttons WHERE user_id=%s;", session["user_id"])
+
     flash("Successfully deleted all account data")
     return redirect("/login")
 
