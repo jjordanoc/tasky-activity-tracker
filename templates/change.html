@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Tasky - Change password
+{% endblock %}
+
+{% block main %}
+<div class="mt-5">
+    <div class="form-group">
+        <h2>Change password</h2>
+    </div>
+    <form action="/change_password" method="post">
+        <div class="form-group">
+            <input class="form-control" name="password" placeholder="New password" type="password">
+        </div>
+        <div class="form-group">
+            <input class="form-control" name="confirmation" placeholder="Confirm new password" type="password">
+        </div>
+        <button class="btn btn-primary" type="submit">Change password</button>
+    </form>
+</div>
+{% endblock %}
+

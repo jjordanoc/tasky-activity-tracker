@@ -1,0 +1,204 @@
+/* basic overrides */
+body {
+  /* override Bootstrap's settings */
+  background-color: white;
+  color: black;
+  font-family: "Major Mono Display", monospace;
+}
+
+main .form-control {
+  /* center form controls */
+  display: inline-block;
+  /* override Bootstrap's 100% width for form controls */
+  width: auto;
+}
+
+main {
+  /* scroll horizontally as needed */
+  overflow-x: auto;
+  /* center contents */
+  text-align: center;
+}
+
+main img {
+  /* constrain images on small screens */
+  max-width: 100%;
+}
+
+/* especific overrides */
+nav {
+  border-bottom: 0.3em solid black;
+}
+
+.modal-content {
+  background-color: white;
+}
+
+.alert {
+  border-radius: 0;
+}
+
+.counter {
+  display: inline-block;
+}
+
+.account-button {
+  background-color: transparent;
+  border: none;
+  color: black;
+}
+
+.nav-link {
+  color: black;
+  font-family: "Open Sans", sans-serif;
+}
+
+.navbar-brand {
+  color: black;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  font-size: 2.5em;
+}
+
+.form-group {
+  margin-top: 33px;
+  margin-bottom: 33px;
+}
+
+.btn-primary {
+  background-color: white;
+  color: black;
+  border: 5px solid black;
+  border-radius: 5%;
+  padding: 12px;
+}
+
+.btn-primary:hover {
+  background-color: black;
+  color: white;
+  border: 5px solid white;
+  border-radius: 5%;
+}
+
+.util-buttons {
+  padding: 0 auto;
+  margin-left: 7%;
+}
+
+.msg {
+  color: white;
+  background-color: black;
+}
+
+.login-info {
+  font-family: "Open Sans", sans-serif;
+  font-style: bold;
+  margin-top: 10px;
+  margin-bottom: 15px;
+  font-size: 1.2em;
+}
+
+/* buttons */
+.buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.button {
+  /*
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  position: relative;
+  overflow: hidden;
+  width: 250px;
+  height: 250px;
+  margin: 10px;
+  z-index: 2;
+  border: 10px solid #222222;
+  border-radius: 50%;
+  outline: none !important;
+  -webkit-box-shadow: 0 8px #777;
+          box-shadow: 0 8px #777;
+  */
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  display: inline-block;
+  text-align: center;
+  margin: 5px;
+  overflow: hidden;
+
+  -ms-word-break: break-all;
+    word-break: break-all;
+
+ /* Non standard for webkit */
+     word-break: break-word;
+
+    -webkit-hyphens: auto;
+       -moz-hyphens: auto;
+        -ms-hyphens: auto;
+            hyphens: auto;
+  padding: 25px;
+  position: relative;
+
+  z-index: 2;
+  border: 10px solid #222222;
+  border-radius: 50%;
+  outline: none !important;
+  -webkit-box-shadow: 0 8px #777;
+          box-shadow: 0 8px #777;
+}
+
+.button:hover {
+  -webkit-filter: brightness(90%);
+          filter: brightness(90%);
+}
+
+.button:active {
+  -webkit-box-shadow: 0 3px #555;
+          box-shadow: 0 3px #555;
+  -webkit-transform: translateY(5px);
+          transform: translateY(5px);
+}
+
+.button h3 {
+  /*
+  position: absolute;
+  transform:translate(-50%,-50%);
+  color: black;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  top: 50%;
+  left: 50%;
+  */
+  transform:translate(-50%,-50%);
+  position:absolute;
+  top:50%;
+  left:50%;
+  color: black;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+
+}
+
+.button-foot {
+  width: 250px;
+  position: relative;
+}
+
+/*# sourceMappingURL=styles.css.map */

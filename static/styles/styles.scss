@@ -1,0 +1,157 @@
+@mixin size($width, $height) {
+    width: $width;
+    height: $height;
+}
+
+$p_font: 'Major Mono Display', monospace;
+$s_font: 'Open Sans', sans-serif;
+
+$b_color: white;
+$t_color: black;
+
+/* basic overrides */
+body
+{
+    /* override Bootstrap's settings */
+    background-color: $b_color;
+    color: $t_color;
+    font-family: $p_font;
+}
+
+main .form-control
+{
+    /* center form controls */
+    display: inline-block;
+
+    /* override Bootstrap's 100% width for form controls */
+    width: auto;
+}
+
+main
+{
+    /* scroll horizontally as needed */
+    overflow-x: auto;
+
+    /* center contents */
+    text-align: center;
+}
+
+main img
+{
+    /* constrain images on small screens */
+    max-width: 100%;
+}
+
+
+/* especific overrides */
+nav
+{
+    border-bottom: 0.3em solid $t_color;
+}
+
+.modal-content
+{
+    background-color: $b_color;
+}
+
+.alert {
+    border-radius: 0;
+}
+
+.counter {
+    display: inline-block;
+}
+
+.account-button {
+    background-color: transparent;
+    border: none;
+    color: $t_color;
+}
+
+.nav-link {
+    color: $t_color;
+    font-family: $s_font;
+}
+
+.navbar-brand {
+    color: $t_color;
+    user-select: none;
+    font-size: 2.5em;
+}
+
+.form-group {
+    margin-top: 33px;
+    margin-bottom: 33px;
+}
+
+.btn-primary {
+    background-color: $b_color;
+    color: $t_color;
+    border: 5px solid $t_color;
+    border-radius: 5%;
+    padding: 12px;
+}
+
+.btn-primary:hover {
+    background-color: $t_color;
+    color: $b_color;
+    border: 5px solid $b_color;
+    border-radius: 5%;
+}
+
+.msg {
+    color: $b_color;
+    background-color: $t_color;
+}
+
+.login-info {
+    font-family: $s_font;
+    font-style: bold;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+}
+
+
+/* buttons */
+.buttons {
+    display:         flex;
+    flex-wrap:       wrap;
+    justify-content: center;
+}
+
+.button {
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+    @include size(250px, 250px);
+    margin: 10px;
+    z-index: 2;
+    border: 10px solid #222222;
+    border-radius: 50%;
+    outline: none !important;
+    box-shadow: 0 8px #777;
+}
+
+.button:hover {
+    filter: brightness(90%);
+}
+
+.button:active {
+    box-shadow: 0 3px #555;
+    transform: translateY(5px);
+}
+
+.button h3
+{
+    position: absolute;
+    color: $t_color;
+    user-select: none;
+    top: 40%;
+    left: 20%;
+    right: 20%;
+}
+
+.button-foot {
+    position: relative;
+}
